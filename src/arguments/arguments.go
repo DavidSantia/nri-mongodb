@@ -25,6 +25,7 @@ type ArgumentList struct {
 	Passphrase            string `default:"" help:"Passphrase for decrypting Private Key"`
 	SslInsecureSkipVerify bool   `default:"false" help:"Skip verification of the certificate sent by the host. This can make the connection susceptible to man-in-the-middle attacks, and should only be used for testing."`
 	Filters               string `default:"" help:"JSON data defining database and collection filters."`
+	FilterAggregations    bool   `default:"false" help:"Ignore tmp.agg_out collections"`
 	ConcurrentCollections int    `default:"50" help:"The number of entities to collect metrics for concurrently. This is tunable to reduce CPU and memory requirements."`
 }
 

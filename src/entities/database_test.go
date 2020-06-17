@@ -80,7 +80,7 @@ func TestGetDatabases(t *testing.T) {
 		Once()
 	expectedDBs := []string{"db1", "db2"}
 
-	databases, err := GetDatabases(mockSession, testIntegration, testFilter)
+	databases, err := GetDatabases(mockSession, testIntegration, testFilter, false)
 	mockSession.AssertExpectations(t)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, databases)
@@ -103,7 +103,7 @@ func TestGetDatabases_Error(t *testing.T) {
 		Return(assert.AnError).
 		Once()
 
-	databases, err := GetDatabases(mockSession, testIntegration, testFilter)
+	databases, err := GetDatabases(mockSession, testIntegration, testFilter, false)
 	mockSession.AssertExpectations(t)
 	assert.Error(t, err)
 	assert.Equal(t, assert.AnError, err)

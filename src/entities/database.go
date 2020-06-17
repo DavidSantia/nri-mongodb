@@ -3,6 +3,7 @@ package entities
 import (
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/integration"
@@ -58,7 +59,8 @@ func (c *databaseCollector) CollectMetrics() {
 }
 
 // GetDatabases returns a list of DatabaseCollectors which each collect a specific database
-func GetDatabases(session connection.Session, integration *integration.Integration, filter *filter.DatabaseFilter) ([]Collector, error) {
+func GetDatabases(session connection.Session, integration *integration.Integration,
+	filter *filter.DatabaseFilter, filterAggregations bool) ([]Collector, error) {
 	type DatabaseListUnmarshaller struct {
 		Databases []struct {
 			Name string `bson:"name"`
@@ -72,7 +74,8 @@ func GetDatabases(session connection.Session, integration *integration.Integrati
 
 	databases := make([]Collector, 0, len(unmarshalledDatabaseList.Databases))
 	for _, database := range unmarshalledDatabaseList.Databases {
-		if filter == nil || filter.CheckFilter(database.Name, "") {
+		if (filter == nil || filter.CheckFilter(database.Name, "")) &&
+			(!filterAggregations || !strings.Contains(database.Name, "tmp.agg_out")) {
 			newDatabase := &databaseCollector{
 				defaultCollector{
 					database.Name,

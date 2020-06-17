@@ -186,7 +186,7 @@ func createDatabaseCollectors(wg *sync.WaitGroup, session connection.Session, co
 
 	// this error is checked when arguments are validated
 	databaseFilter, _ := filter.ParseFilters(args.Filters)
-	databases, err := entities.GetDatabases(session, integration, databaseFilter)
+	databases, err := entities.GetDatabases(session, integration, databaseFilter, args.FilterAggregations)
 	if err != nil {
 		log.Error("Failed to collect list of databases: %v", err)
 		return
